@@ -1,0 +1,25 @@
+form{
+    min-width: 350px;
+    display: flex;
+    flex-direction: row;
+}
+
+.login-links {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row;
+    padding-top: 3rem;
+    padding-bottom: 25px;
+    width: 100%;
+    margin: 30px 10%;
+}
+.login button{
+    background-color: rgb(212, 102, 28);
+    border: none; 
+    color: white; 
+    margin: 0 0 0 20px ;
+    padding: 14px 28px; 
+    cursor: pointer; 
+    border-radius: 8px;
+    text-transform: uppercase;
+}

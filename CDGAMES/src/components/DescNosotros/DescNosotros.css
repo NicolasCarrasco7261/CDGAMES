@@ -1,0 +1,25 @@
+.info-box {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .info-box h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .info-box p {
+      color: #555;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .info-box span {
+      color: #e74c3c;
+      font-weight: bold;
+    }

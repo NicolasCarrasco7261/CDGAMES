@@ -1,0 +1,60 @@
+.container-login{
+  display: flex;
+  justify-content: center;
+  margin-top: 50%;
+}
+
+.formLogin{
+    width: 300px;
+    height: 570px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 10px 4px 10px 10px #ccc;
+    border-radius: 20px;
+}
+
+.formLogin i {
+    font-size: 60px;
+    padding-bottom: 10px;
+}
+
+.formLogin input[type="text"], input[type=password] {
+    outline: 0;
+    border: 1px solid #ccc;
+    width: 80%;
+    padding: 10px;
+}
+
+.formLogin label {
+    font-weight: 500;
+    padding: 10px;
+}
+
+.box-visible{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.formLogin button {
+    outline: 0;
+    border: 0;
+    background-color: #121021;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    width: 250px;
+    padding: 5px;
+    transition: all .4s ease-in-out;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.formLogin button:hover {
+    opacity: .75;
+}

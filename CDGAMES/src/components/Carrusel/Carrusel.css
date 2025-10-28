@@ -1,0 +1,10 @@
+.carousel {
+    display: flex;
+    padding-bottom: 25px;
+}
+
+.slider-item {
+    flex: 0 0 100%;
+    width: 100%;
+    object-fit: cover;
+}
