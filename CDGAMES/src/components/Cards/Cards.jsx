@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Cards.css'
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 
 export function Cards() {
@@ -31,6 +33,34 @@ export function Cards() {
     cargarProductos();
   }, []);
 
+   const agregaCarrito = (producto) => {
+    try {
+      const carritoActual = JSON.parse(localStorage.getItem('carrito')) || [];
+
+      const index = carritoActual.findIndex(item => item.id === producto.id);
+
+      if (index >= 0) {
+        carritoActual[index].cantidad = (carritoActual[index].cantidad || 1) + 1;
+      } else {
+        carritoActual.push({
+          id: producto.id,
+          nombre: producto.nombre,
+          precio: producto.precio,
+          imagenUrl: producto.imagenUrl,
+          stock: producto.stock,
+          cantidad: 1
+        });
+      }
+
+      localStorage.setItem('carrito', JSON.stringify(carritoActual));
+
+      Swal.fire({title: 'Producto agregado', text: `${producto.nombre} agregado al carrito`, icon: 'success'});
+      console.log('Carrito actual:', carritoActual);
+    } catch (err) {
+      console.error('Error al agregar al carrito:', err);
+    }
+  };
+
   const productosActuales = productos.filter(p => p.activo).slice(0, 30);
 
   return (
@@ -42,15 +72,15 @@ export function Cards() {
           productosActuales.map((prod) => (
             <div className="card" key={prod.id}>
               <img
-                src={prod.imagen}
+                src={prod.imagenUrl}
                 className="card-img-top"
-                alt={prod.imgDesc}
+                alt="img-producto"
               />
               <div className="card-body">
                 <h5 className="card-title">{prod.nombre}</h5>
                 <p className="card-text">{prod.descripcion}</p>
                 <p className="card-text">Precio: ${prod.precio}</p>
-                <Link to="/carrito" className="btn btn-primary">Agregar al carrito</Link>
+                <button className="btn btn-primary" onClick={() => agregaCarrito(prod)}>Agregar al carrito</button>
               </div>
             </div>
           ))
