@@ -69,6 +69,7 @@ Advertencia: La contraseña de la base de datos (archivo seed: data.sql) está c
 
 - Abrir la consola con ctrl + ñ
 - Entrar en el directorio del backend con cd CDGAMES
+- ejecutar el comando npm install (en caso de que no aparezca la carpeta node-modules)
 - Ejecutar el comando npm run dev
 - Copiar el link http://localhost:5173/ y pegarlo en el navegador web
 
