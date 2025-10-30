@@ -8,10 +8,6 @@ export function Navbar() {
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/">CD GAMES</Link>
-                    <form role="search">
-                        <input className="form-control me-2" type="search" placeholder="Ingrese un producto a buscar" aria-label="Search" />
-                        <button className="btn btn-outline-success" type="submit">Buscar</button>
-                    </form>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
                         aria-controls="menuPrincipal" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>

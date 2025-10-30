@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import './Cards.css'
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-
 export function Cards() {
   const [productos, setProductos] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const cargarProductos = async () => {
     try {
@@ -33,7 +33,7 @@ export function Cards() {
     cargarProductos();
   }, []);
 
-   const agregaCarrito = (producto) => {
+  const agregaCarrito = (producto) => {
     try {
       const carritoActual = JSON.parse(localStorage.getItem('carrito')) || [];
 
@@ -54,33 +54,64 @@ export function Cards() {
 
       localStorage.setItem('carrito', JSON.stringify(carritoActual));
 
-      Swal.fire({title: 'Producto agregado', text: `${producto.nombre} agregado al carrito`, icon: 'success'});
+      Swal.fire({ title: 'Producto agregado', text: `${producto.nombre} agregado al carrito`, icon: 'success' });
       console.log('Carrito actual:', carritoActual);
     } catch (err) {
       console.error('Error al agregar al carrito:', err);
     }
   };
 
-  const productosActuales = productos.filter(p => p.activo).slice(0, 30);
+  const productosActivosLimitados = useMemo(() => {
+    return productos.filter(p => p.activo).slice(0, 30);
+  }, [productos]);
+
+  const productosFiltrados = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return productosActivosLimitados;
+
+    return productosActivosLimitados.filter(p => {
+      const nombre = (p.nombre || '').toLowerCase();
+      return nombre.includes(q);
+    });
+  }, [productosActivosLimitados, searchTerm]);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
+      <form role="search-producto" onSubmit={handleSearchSubmit} className="search-form">
+        <input
+          className="input-search-producto"
+          type="search"
+          placeholder="Ingrese un producto a buscar"
+          aria-label="Search"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+      </form>
+
       <div className='container-card'>
-        {productosActuales.length === 0 ? (
-          <h2>No hay productos disponibles.</h2>
+        {productosFiltrados.length === 0 ? (
+          <h2>{searchTerm ? `No se encuentraron productos con el término de búsqueda "${searchTerm}".` : 'No hay productos disponibles.'}</h2>
         ) : (
-          productosActuales.map((prod) => (
+          productosFiltrados.map((prod) => (
             <div className="card" key={prod.id}>
               <img
                 src={prod.imagenUrl}
                 className="card-img-top"
-                alt="img-producto"
+                alt={prod.nombre || 'img-producto'}
               />
               <div className="card-body">
                 <h5 className="card-title">{prod.nombre}</h5>
                 <p className="card-text">{prod.descripcion}</p>
                 <p className="card-text">Precio: ${prod.precio}</p>
-                <button className="btn btn-primary" onClick={() => agregaCarrito(prod)}>Agregar al carrito</button>
+                <button className="btn-card" onClick={() => agregaCarrito(prod)}>Agregar al carrito</button>
               </div>
             </div>
           ))
@@ -89,4 +120,3 @@ export function Cards() {
     </>
   );
 }
-

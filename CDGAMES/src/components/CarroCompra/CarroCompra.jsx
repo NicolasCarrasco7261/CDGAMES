@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 export function CarroCompra() {
+
   const [carrito, setCarrito] = useState([]);
 
   const cargarCarrito = () => {
-    const raw = JSON.parse(localStorage.getItem('carrito')) || [];
-    const normalized = raw.map(item => ({
+    const cart = JSON.parse(localStorage.getItem('carrito')) || [];
+    const normalized = cart.map(item => ({
       ...item,
       precio: Number(item.precio) || 0,
       cantidad: Number(item.cantidad) || 1,
@@ -44,7 +45,7 @@ export function CarroCompra() {
   };
 
   const vaciarCarrito = () => {
-    
+
     localStorage.removeItem('carrito');
     setCarrito([]);
     window.dispatchEvent(new CustomEvent('carrito_actualizado'));
@@ -62,12 +63,12 @@ export function CarroCompra() {
 
   const finalizarCompra = async () => {
     if (carrito.length === 0) {
-      Swal({title: 'Carro de compra vacío', text: 'El carrito está vacío.', icon: 'warning'});
+      Swal({ title: 'Carro de compra vacío', text: 'El carrito está vacío.', icon: 'warning' });
       return;
     }
 
     const total = calcularTotal();
-    Swal.fire({title: 'Compra realizada', text: `Compra realizada. Total: ${formatPeso(total)}`, icon: 'success'});
+    Swal.fire({ title: 'Compra realizada', text: `Compra realizada. Total: ${formatPeso(total)}`, icon: 'success' });
 
     vaciarCarrito();
   };
