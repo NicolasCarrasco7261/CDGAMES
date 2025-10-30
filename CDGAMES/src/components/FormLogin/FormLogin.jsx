@@ -1,12 +1,53 @@
 import './FormLogin.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+const API_BASE_URL = "http://localhost:8080/api";
 
 export function FormLogin() {
+    const { id } = useParams();
+    const [usuario, setUsuario] = useState({
+        nombre: "",
+        email: "",
+        rol: "",
+        estado: "",
+    });
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const handleBack = () => {
         navigate(-1);
     };
+
+    const cargarUsuario = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${API_BASE_URL}/usuarios/${id}`);
+            if (!response.ok) {
+                throw new Error('Error en la respuesta del servidor');
+            }
+
+            const data = await response.json();
+            console.log("Respuesta del backend:", data);
+
+            const usuariosActivos = data.map(u => ({
+                ...u,
+                activo: p.activo === 'ACTIVO' || p.activo === 'INACTIVO',
+            }));
+
+            setUsuario(usuariosActivos);
+        } catch (error) {
+            console.error('Error al obtener los usuarios:', error);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        cargarUsuario();
+    }, []);
 
     return (
         <div className='container-login'>
@@ -21,7 +62,15 @@ export function FormLogin() {
                     <input type="checkbox" id="visible" />
                     <label htmlFor="visible">Mostrar contraseña</label>
                 </div>
-                <button type="submit" id="submit" onClick="login()">Iniciar sesion</button>
+                {loading ? (
+                    <div className="loading">Cargando usuario...</div>
+                ) : (
+                    <div key={usuario.id}>
+                        <Link to='/inventario'>
+                            <button type="submit" id="submit">Iniciar sesion</button>
+                        </Link>
+                    </div>
+                )}
                 <button onClick={handleBack}>volver</button>
             </form>
         </div>
@@ -34,7 +83,7 @@ export function FormRegister() {
     const handleBack = () => {
         navigate(-1);
     };
-    
+
     return (
         <div className='container-login'>
             <form className='formLogin'>
@@ -50,7 +99,9 @@ export function FormRegister() {
                     <input type="checkbox" id="visiblePass" />
                     <label htmlFor="visiblePass">Mostrar contraseña</label>
                 </div>
-                <button type="submit" id="submitRegister" onClick="register()">Registrarse</button>
+                <Link to='/inventario'>
+                    <button type="submit" id="submitLogin" onClick="register()">Registrarse</button>
+                </Link>
                 <button onClick={handleBack}>volver</button>
             </form>
         </div>

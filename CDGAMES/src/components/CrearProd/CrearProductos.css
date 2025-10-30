@@ -1,0 +1,90 @@
+.crear-producto-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.form-card {
+  background: #1a1f3a;
+  color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+input, textarea, select {
+  padding: 8px;
+  border: 1px solid #2a3560;
+  border-radius: 6px;
+  background-color: #0f1326;
+  color: #fff;
+}
+
+.price-input {
+  display: flex;
+  align-items: center;
+}
+
+.currency {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background-color: #4f70ff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background-color: #2a2f50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.error-message {
+  background: #5c1b1b;
+  color: #f8d7da;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.loading {
+  text-align: center;
+  color: #aaa;
+}
