@@ -119,6 +119,10 @@ Testing React con Jest.
 
 npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
 
+vitest
+
+npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
+
 ## Conclusión
 - La semilla de SQL se está ejecutando correctamente.  
 - El CRUD de productos, usuarios y categorías se encuentra en funcionamiento.  
