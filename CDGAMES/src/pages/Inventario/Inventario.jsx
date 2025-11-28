@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Inventario() {
   const [productos, setProductos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
+  
 
   const API_BASE_URL = "http://localhost:8080/api";
 
@@ -40,39 +41,93 @@ export default function Inventario() {
     }).format(d);
   };
 
+  // Cerrar sesión
+  const handleLogout = () => {
+    Swal.fire({
+      title: "Cerrar Sesión",
+      text: "¿Estás seguro de que deseas cerrar sesión?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#5bdd33ff",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, cerrar sesión",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("authToken"); // Elimina el token
+        navigate("/"); // Redirige al home
+      }
+    });
+  };
+
   // Eliminar usuario
   const handleEliminarUsuario = async (id) => {
-    if (!window.confirm("¿Seguro que deseas eliminar este usuario?")) return;
-    try {
-      const res = await fetch(`${API_BASE_URL}/usuarios/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Error al eliminar usuario");
-      setUsuarios((prev) => prev.filter((u) => u.id !== id));
-    } catch (e) {
-      console.error(e);
-      alert("No se pudo eliminar el usuario");
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás revertir esta acción.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar usuario",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`${API_BASE_URL}/usuarios/${id}`, {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error("Error al eliminar usuario");
+        setUsuarios((prev) => prev.filter((u) => u.id !== id));
+        Swal.fire("¡Eliminado!", "El usuario ha sido eliminado.", "success");
+      } catch (e) {
+        console.error(e);
+        Swal.fire("Error", "No se pudo eliminar el usuario.", "error");
+      }
     }
   };
 
   // Eliminar producto
   const handleEliminarProducto = async (id) => {
-    if (!window.confirm("¿Seguro que deseas eliminar este producto?")) return;
-    try {
-      const response = await fetch(`${API_BASE_URL}/productos/${id}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) throw new Error("Error al eliminar producto");
-      setProductos((prev) => prev.filter((p) => p.id !== id));
-    } catch (err) {
-      console.error(err);
-      alert("No se pudo eliminar el producto");
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el producto permanentemente.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar producto",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/productos/${id}`, {
+          method: "DELETE",
+        });
+        if (!response.ok) throw new Error("Error al eliminar producto");
+        setProductos((prev) => prev.filter((p) => p.id !== id));
+        Swal.fire("¡Eliminado!", "El producto ha sido eliminado.", "success");
+      } catch (err) {
+        console.error(err);
+        Swal.fire("Error", "No se pudo eliminar el producto.", "error");
+      }
     }
   };
 
   return (
     <div className="container">
-      <h1>CDGames – Panel de Administración</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1>CDGames – Panel de Administración</h1>
+        <button className="btn-delete" onClick={handleLogout}>Cerrar Sesión</button>
+      </div>
 
       {/* USUARIOS */}
       <div className="panel" style={{ marginBottom: 20 }}>

@@ -65,33 +65,6 @@ Contraseña: 123456
 
 Advertencia: La contraseña de la base de datos (archivo seed: data.sql) está cifrada utilizando BCrypt, pero la expuesta aquí es la que debes utilizar para realizar las pruebas (el backend la encripta automáticamente).
 
-## Instrucciones para FrontEnd
-
-- Abrir la consola con ctrl + ñ
-- Entrar en el directorio del backend con cd CDGAMES
-- Ejecutar el comando npm run dev
-- Copiar el link http://localhost:5173/ y pegarlo en el navegador web
-
-## Librerías usadas en FrontEnd (Proyecto React)
-
-React Bootstrap
-
-Para instalar esta libreria de React, debe ejecutar el siguiente comando en la consola:
-
-- npm install react-bootstrap bootstrap
-
-React Router DOM
-
-Para instalar esta libreria de React, debe ejecutar el siguiente comando en la consola:
-
-- npm install react-router-dom
-
-SweetAlert2 (libreria opcional)
-
-Para instalar esta libreria, debe ejecutar el siguiente comando en la consola:
-
-- npm install sweetalert2
-
 ## Conclusión
 - La semilla de SQL se está ejecutando correctamente.  
 - El CRUD de productos, usuarios y categorías se encuentra en funcionamiento.  

@@ -81,7 +81,7 @@ export default function EditarUsuario() {
         throw new Error(err.message || "Error al guardar cambios");
       }
 
-      navigate("/"); // volver sin banners
+      navigate("/inventario"); // volver sin banners
     } catch (e) {
       setError(e.message || "No se pudieron guardar los cambios");
     } finally {
@@ -90,7 +90,7 @@ export default function EditarUsuario() {
   };
 
   // Cancelar sin confirm
-  const handleCancel = () => navigate("/");
+  const handleCancel = () => navigate("/inventario");
 
   return (
     <div className="crear-producto-container">

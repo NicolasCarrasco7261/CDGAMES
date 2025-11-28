@@ -12,9 +12,6 @@ export function Home(){
             <div>
                 <Carrusel/>
             </div>
-            <h2>
-                Productos Destacados
-            </h2>
             <div>
                 <Footer/>
             </div>

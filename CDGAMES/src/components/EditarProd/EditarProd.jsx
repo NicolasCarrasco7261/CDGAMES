@@ -83,7 +83,7 @@ export default function EditarProducto() {
         throw new Error(err.message || "Error al guardar cambios");
       }
 
-      navigate("/"); // sin banners
+      navigate("/inventario"); // sin banners
     } catch (e) {
       setError(e.message || "No se pudieron guardar los cambios");
     } finally {
@@ -93,7 +93,7 @@ export default function EditarProducto() {
 
   // ⬇️ Sin confirmación
   const handleCancel = () => {
-    navigate("/");
+    navigate("/inventario");
   };
 
   return (

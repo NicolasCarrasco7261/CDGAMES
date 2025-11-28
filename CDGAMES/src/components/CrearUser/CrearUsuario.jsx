@@ -49,7 +49,7 @@ export default function CrearUsuario() {
                 throw new Error(errData.message || "Error al crear el usuario");
             }
 
-            navigate("/"); // Regresa al inicio
+            navigate("/inventario"); // Regresa al inicio
         } catch (err) {
             setError(err.message || "No se pudo crear el usuario");
         } finally {
@@ -60,7 +60,7 @@ export default function CrearUsuario() {
     const handleCancel = () => {
         const tieneContenido = Object.values(usuario).some((v) => v !== "");
         if (!tieneContenido || window.confirm("¿Cancelar creación de usuario?")) {
-            navigate("/");
+            navigate("/inventario");
         }
     };
 
