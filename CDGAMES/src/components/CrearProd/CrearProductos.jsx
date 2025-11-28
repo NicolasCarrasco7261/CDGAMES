@@ -72,7 +72,7 @@ export default function CrearProducto() {
         throw new Error(errorData.message || 'Error al crear el producto');
       }
 
-      navigate('/', {
+      navigate('/inventario', {
         state: { message: 'Producto creado exitosamente' }
       });
 
@@ -86,7 +86,7 @@ export default function CrearProducto() {
   const handleCancel = () => {
     const tieneContenido = Object.values(producto).some(val => val !== '');
     if (!tieneContenido || window.confirm('¿Está seguro de cancelar? Se perderán los datos ingresados.')) {
-      navigate('/');
+      navigate('/inventario');
     }
   };
 

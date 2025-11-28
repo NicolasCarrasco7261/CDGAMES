@@ -1,12 +1,17 @@
 
 -- CDGAMES DATA SEED
 
--- Usuario admin
 INSERT INTO usuarios (nombre, email, password, rol, estado, created_at)
 VALUES ('Carlos López', 'carc.lopez@cdgames.cl',
-        '$2a$10$SjzDrVGr6eNFikDu.WgldeH2qmITtsQ44HM5x/uvoN9e7crRuHzJa',
+        '$2a$10$73HH6fMWvYMBLI/Owfkx2eXDe7G9xYkHGFyIu9.XMuWE5b9yNFcjK',
         'ADMINISTRADOR', 'ACTIVO', NOW());
 
+INSERT INTO usuarios (nombre, email, password, rol, estado, created_at)
+VALUES ('Juan Pérez', 'juan.perez@cdgames.cl',
+        '$2a$10$73HH6fMWvYMBLI/Owfkx2eXDe7G9xYkHGFyIu9.XMuWE5b9yNFcjK',
+        'CLIENTE', 'ACTIVO', NOW());
+
+        
 -- Categorías base
 INSERT INTO categorias (nombre, activo) VALUES
 ('Nintendo', 1),

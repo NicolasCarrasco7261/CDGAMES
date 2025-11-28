@@ -1,108 +1,181 @@
 import './FormLogin.css';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Swal from 'sweetalert2';
 
-const API_BASE_URL = "http://localhost:8080/api";
+const AUTH_API_URL = "http://localhost:8080/auth/login";
+
+function parseJwt(token) {
+    try {
+        return JSON.parse(atob(token.split('.')[1]));
+    } catch (error) {
+        console.error('Ha ocurrido un error al decodificar el token:', error);
+        return null;
+    }
+}
 
 export function FormLogin() {
-    const { id } = useParams();
-    const [usuario, setUsuario] = useState({
-        nombre: "",
-        email: "",
-        rol: "",
-        estado: "",
-    });
-    const [loading, setLoading] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate(-1);
+        navigate("/");
     };
 
-    const cargarUsuario = async () => {
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError('');
         setLoading(true);
+
         try {
-            const response = await fetch(`${API_BASE_URL}/usuarios/${id}`);
+            const response = await fetch(AUTH_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
             if (!response.ok) {
-                throw new Error('Error en la respuesta del servidor');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Credenciales inválidas');
             }
 
             const data = await response.json();
-            console.log("Respuesta del backend:", data);
+            
+            // Guardar el token en localStorage
+            const token = data.token;
+            localStorage.setItem('authToken', token);
 
-            const usuariosActivos = data.map(u => ({
-                ...u,
-                activo: p.activo === 'ACTIVO' || p.activo === 'INACTIVO',
-            }));
+            // Decodificar el token para obtener el rol
+            const decodedToken = parseJwt(token);
+            const userRole = decodedToken?.rol; // Asume que el rol está en el payload como "role"
 
-            setUsuario(usuariosActivos);
-        } catch (error) {
-            console.error('Error al obtener los usuarios:', error);
-        }
-        finally {
+            Swal.fire({
+                title: 'Inicio de Sesión',
+                text: 'Has iniciado sesión exitosamente. Redirigiendo...',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+
+            // Redirigir según el rol
+            if (userRole === 'ADMINISTRADOR') {
+                navigate('/inventario');
+            } else {
+                navigate('/inventario');
+            }
+
+        } catch (err) {
+            setError(err.message || 'Ocurrió un error inesperado.');
+            console.error('Error al iniciar sesión:', err);
+        } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        cargarUsuario();
-    }, []);
-
     return (
         <div className='container-login'>
-            <form className='formLogin'>
+            <form className='formLogin' onSubmit={handleLogin}>
                 <i className="fa-solid fa-circle-user"></i>
                 <h3>Iniciar sesion</h3>
-                <label htmlFor="username">Usuario</label>
-                <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required />
+                <label htmlFor="email">Correo Electrónico</label>
+                <input type="email" id="email" name="email" placeholder="Ingrese su correo" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 <label htmlFor="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required />
-                <div className="box-visible">
-                    <input type="checkbox" id="visible" />
-                    <label htmlFor="visible">Mostrar contraseña</label>
-                </div>
-                {loading ? (
-                    <div className="loading">Cargando usuario...</div>
-                ) : (
-                    <div key={usuario.id}>
-                        <Link to='/inventario'>
-                            <button type="submit" id="submit">Iniciar sesion</button>
-                        </Link>
-                    </div>
-                )}
-                <button onClick={handleBack}>volver</button>
+                <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                
+                {error && <p className="error-message">{error}</p>}
+
+                <button type="submit" id="submit" disabled={loading}>
+                    {loading ? 'Iniciando...' : 'Iniciar sesion'}
+                </button>
+                <button type="button" onClick={handleBack}>Volver al Inicio</button>
             </form>
         </div>
     );
 }
 
 export function FormRegister() {
+    const [nombre, setNombre] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate(-1);
+        navigate("/");
+    };
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        const payload = {
+            nombre: nombre.trim(),
+            email: email.trim(),
+            password: password,
+            rol: 'CLIENTE', // Rol por defecto para nuevos registros
+            estado: 'ACTIVO' // Estado por defecto
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/api/usuarios', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'No se pudo completar el registro.');
+            }
+
+            await Swal.fire({
+                title: '¡Registro Exitoso!',
+                text: 'Tu cuenta ha sido creada. Ahora serás redirigido para iniciar sesión.',
+                icon: 'success',
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            navigate('/login');
+
+        } catch (err) {
+            setError(err.message);
+            console.error('Error en el registro:', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <div className='container-login'>
-            <form className='formLogin'>
+            <form className='formLogin' onSubmit={handleRegister}>
                 <i className="fa-solid fa-circle-user"></i>
                 <h3>Registro de Usuario</h3>
-                <label htmlFor="userRegister">Usuario</label>
-                <input type="text" id="userRegister" name="userRegister" placeholder="Ingrese su usuario" required />
+                <label htmlFor="nombreRegister">Nombre Completo</label>
+                <input type="text" id="nombreRegister" name="nombreRegister" placeholder="Ingrese su nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
                 <label htmlFor="emailRegister">Correo</label>
-                <input type="text" id="emailRegister" name="emailRegister" placeholder="Ingrese su correo" required />
-                <label htmlFor="userPass">Contraseña</label>
-                <input type="password" id="userPass" name="userPass" placeholder="Ingrese su contraseña" required />
-                <div className="box-visible">
-                    <input type="checkbox" id="visiblePass" />
-                    <label htmlFor="visiblePass">Mostrar contraseña</label>
-                </div>
-                <Link to='/inventario'>
-                    <button type="submit" id="submitLogin" onClick="register()">Registrarse</button>
-                </Link>
-                <button onClick={handleBack}>volver</button>
+                <input type="email" id="emailRegister" name="emailRegister" placeholder="Ingrese su correo" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <label htmlFor="passwordRegister">Contraseña</label>
+                <input type="password" id="passwordRegister" name="passwordRegister" placeholder="Mínimo 6 caracteres" value={password} onChange={(e) => setPassword(e.target.value)} minLength="6" required />
+                
+                {error && <p className="error-message">{error}</p>}
+
+                <button type="submit" id="submitRegister" disabled={loading}>
+                    {loading ? 'Registrando...' : 'Registrarse'}
+                </button>
+                <button type="button" onClick={handleBack} disabled={loading}>
+                    Volver al Inicio
+                </button>
             </form>
         </div>
     );

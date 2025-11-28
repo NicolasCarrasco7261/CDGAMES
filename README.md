@@ -2,16 +2,31 @@
 
 ## Descripción del proyecto
 CDGames es una aplicación fullstack de comercio electrónico con la que podemos vender videojuegos nuevos y de segunda mano.
-El siguiente módulo es el backend del sistema, que se desarrolló utilizando Spring Boot cuya función principal es la persistencia de datos, la lógica de negocio y la exposición de servicios REST consumidos por la parte frontend.
+El siguiente módulo es el backend del sistema, que se desarrolló utilizando Spring Boot cuya función principal es la persistencia de datos, la lógica de negocio y la exposición de servicios REST consumidos por la parte frontend. Además, en esta tercera etapa se integraron mecanismos de seguridad, autenticación, autorización, carrito de compras y generación de boletas, cumpliendo con los requerimientos establecidos por la rúbrica academica.
 
 El sistema permite:
-Gestionar productos: crear, listar, editar y desactivar los artículos.
-Gestionar las categorías que tienen los productos.
-Gestionar usuarios con roles diferentes (administrador, vendedor y cliente).
-Cargar datos iniciales por medio de un archivo seed (data.sql).
-Documentar los endpoints por medio de Swagger UI.
+-         Cliente: 
+1.Autenticación mediante JWT
+2.Agregar productos al carrito
+3.Modificar cantidades o eliminar items
+4.Vaciar carrito
+5.Finalizar compra
+6.Generar boleta automáticamente (neto, IVA y total)
+7.Consultar historial personal de compras
 
+-       Administrador
+1.CRUD completo de productos
+2.CRUD de categorías
+3.Gestión de usuarios
+4.Desactivación de productos
+5.Visualización de todas las boletas del sistema
+6.Acceso a endpoints protegidos por rol
 
+-   Funcionalidades generales del backend
+1.Persistencia en base de datos MySQL a través de JPA/Hibernate
+2.Generación de tablas y carga de datos iniciales vía data.sql
+3.Controladores REST limpios y estructurados
+4.Documentación automática de endpoints con Swagger UI
 ## Tecnologías utilizadas
 El proyecto backend desarrollado para CDGames se creó utilizando un conjunto amplio de tecnologías modernas que permiten obtener un rendimiento elevado, mantenibilidad, facilidad de desarrollo, etc. A continuación se especifican las principales herramientas, frameworks y librerías usadas para la implementación del proyecto:
 Java 21.
@@ -27,6 +42,7 @@ Swagger/Springdoc OpenAPI 2.6.0.
 Maven.
 JUnit 5/Mockito.
 
+NOTA: Debe tener toda esta lista previa de herramientas, frameworks y librerias ya instaladas.
 ## Instrucciones de instalación
 Para poder ejecutar el proyecto completo CDGames, es muy necesario preparar el entorno de desarrollo instalando las herramientas necesarias. En los siguientes pasos se explicitan los pasos a seguir para poder instalar y tener el proyecto funcionando en tu equipo local:
 
@@ -49,7 +65,7 @@ Antes de ejecutar el proyecto asegúrate de tener instalado correctamente el sof
 
 CREATE DATABASE cdgames;
 
-El backend se encargará de generar las tablas automáticamente y las poblará con la información inicial definida en el archivo seed que es el (data.sql).
+El backend se encargará de generar las tablas automáticamente y las poblará con la información inicial definida en el archivo seed que es el (data.sql). La carga inicial se realiza desde: src/main/resources/data.sql
 
 3.- Ejecutar el backend: Abre el proyecto en Visual Studio Code, busca la clase principal CdgamesBackendApplication y haz click en el Run Application para ejecutar la aplicación.
 
@@ -58,18 +74,24 @@ http://localhost:8080/swagger-ui.html
 
 Siguiendo estos pasos, el backend para CDGames estará en marcha y listo para la integración con el frontend (que se ejecutará posteriormente). Gracias a su configuración automatizada y a su documentación integrada, el entorno simplificará el desarrollo y la prueba de los servicios REST del sistema.
 
+ADEVERTENCIA: Previo a esto debes tener el backend clonado desde el repositorio de GitHub:
+-Link GIt Hub: NicolasCarrasco7261/CDGAMES
+
 ## Credencial de prueba
 Rol: ADMINISTRADOR
 Correo: carc.lopez@cdgames.cl
-Contraseña: 123456
+Contraseña: admin123
 
-Advertencia: La contraseña de la base de datos (archivo seed: data.sql) está cifrada utilizando BCrypt, pero la expuesta aquí es la que debes utilizar para realizar las pruebas (el backend la encripta automáticamente).
+Rol: Cliente
+Correo: juan.perez@cdgames.cl
+Contraseña: admin123
+
+Advertencia: Las contraseñas de la base de datos (archivo seed: data.sql) está cifrada utilizando BCrypt, pero la expuesta aquí es la que debes utilizar para realizar las pruebas (el backend la encripta automáticamente).
 
 ## Instrucciones para FrontEnd
 
 - Abrir la consola con ctrl + ñ
 - Entrar en el directorio del backend con cd CDGAMES
-- ejecutar el comando npm install (en caso de que no aparezca la carpeta node-modules)
 - Ejecutar el comando npm run dev
 - Copiar el link http://localhost:5173/ y pegarlo en el navegador web
 
