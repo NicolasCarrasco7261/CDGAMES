@@ -131,3 +131,7 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 - Se cumple la mayoría de la rubrica académica entregada por el profesor.
 
 Nota: Es importante destacar que no puede eliminar una categoría si existen productos relacionados a ella. En caso de que se intente hacer ello, el método mostrará un error. Se trata de una restricción que se impone por motivos de seguridad para prevenir la pérdida total del inventario de productos asociados a dicha categoría en concreto.
+
+## VIDEO DE PRESENTACION (LINK DE YOUTUBE)
+
+https://youtu.be/X0hjLtdWUvA
