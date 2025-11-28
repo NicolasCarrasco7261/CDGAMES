@@ -115,6 +115,10 @@ Para instalar esta libreria, debe ejecutar el siguiente comando en la consola:
 
 - npm install sweetalert2
 
+Testing React con Jest.
+
+npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event
+
 ## Conclusión
 - La semilla de SQL se está ejecutando correctamente.  
 - El CRUD de productos, usuarios y categorías se encuentra en funcionamiento.  
